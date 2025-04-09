@@ -4,32 +4,70 @@
       <root>
         <mxCell id="0" />
         <mxCell id="1" parent="0" />
+        <mxCell id="qsiCrXujolo9chGp3ioG-19" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-1" target="qsiCrXujolo9chGp3ioG-3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-1" value="Uploads zip file to streamlit" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="140" y="290" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-18" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-2" target="qsiCrXujolo9chGp3ioG-1">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-2" value="Actor" style="shape=umlActor;verticalLabelPosition=bottom;verticalAlign=top;html=1;outlineConnect=0;" vertex="1" parent="1">
           <mxGeometry x="50" y="300" width="30" height="60" as="geometry" />
         </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-3" target="qsiCrXujolo9chGp3ioG-4">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-20" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-3" target="qsiCrXujolo9chGp3ioG-16">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-3" value="App opens file and loops through each file" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="300" y="290" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-4" target="qsiCrXujolo9chGp3ioG-5">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-4" value="If PDF" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="425" y="270" width="80" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-5" target="qsiCrXujolo9chGp3ioG-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-5" value="Open and detect text" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="530" y="240" width="80" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-6" target="qsiCrXujolo9chGp3ioG-7">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-6" value="Read values from table" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="630" y="270" width="80" height="80" as="geometry" />
+          <mxGeometry x="660" y="260" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-7" target="qsiCrXujolo9chGp3ioG-8">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-7" value="Read values from body of invoice" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="590" y="370" width="80" height="80" as="geometry" />
+          <mxGeometry x="650" y="390" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-15" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=1;entryDx=0;entryDy=0;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-8" target="qsiCrXujolo9chGp3ioG-3">
+          <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-8" value="Store values against file name as key" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
           <mxGeometry x="470" y="370" width="80" height="80" as="geometry" />
         </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="qsiCrXujolo9chGp3ioG-9">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="60" y="390" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
         <mxCell id="qsiCrXujolo9chGp3ioG-9" value="Convert all stored values to dataframe and export as excel" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
-          <mxGeometry x="310" y="440" width="80" height="80" as="geometry" />
+          <mxGeometry x="240" y="520" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-16" value="Once loop is finished, process results" style="whiteSpace=wrap;html=1;aspect=fixed;" vertex="1" parent="1">
+          <mxGeometry x="240" y="410" width="80" height="80" as="geometry" />
+        </mxCell>
+        <mxCell id="qsiCrXujolo9chGp3ioG-21" value="LOOP" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="500" y="160" width="120" height="60" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
