@@ -71,7 +71,51 @@ def parse_invoice_text(matched_text):
         return None
     
     headers = lines[:value_start]
+    print(f"headers: {headers}")
     values = lines[value_start:]
+    print(f"values: {values}")
+
+
+    class InvoiceTextPatternsIntefrface:
+        @staticmethod
+        def description(text: str, index: int, *args):
+            condition_1 = text[index].replace(',', '').replace('.', '').isdigit()
+            condition_2 = re.match(r'^\d{7}-\d{5,6}$', text[index]) is not None
+            return [condition_1, condition_2]
+        
+        @staticmethod
+        def assembled_in(text: str, index: int, *args):
+            condition_1 = text[index].replace(',', '').replace('.', '').isdigit()
+            return [condition_1]
+        
+        @staticmethod
+        def qty_per_country(text: str, index: int, previous_extract: list, current_extract: list):
+            # print(f"previous_extract: {previous_extract}")
+            condition_1 = len(previous_extract) == len(current_extract)
+            condition_2 = len(previous_extract) > 0 and len(current_extract) > 0
+            return [condition_1 and condition_2]
+
+    class InvoiceTextPatterns:
+
+        lookup = {
+            'Description': InvoiceTextPatternsIntefrface.description, 
+            'Assembled In': InvoiceTextPatternsIntefrface.assembled_in, 
+            'Qty Per Country': InvoiceTextPatternsIntefrface.qty_per_country, 
+        }
+
+        def __init__(self, text: str, index: int, field: str, previous_extract: list, current_extract: list):
+            self.text = text
+            self.index = index
+            self.previous_extract = previous_extract
+            self.current_extract = current_extract
+            self.method = self.lookup[field.get('name')]
+
+        def run(self):
+            result_set = self.method(self.text, self.index, self.previous_extract, self.current_extract)
+            # print(f"result_set: {result_set}")
+            return any(result_set)
+        
+
     
     # Define field structure with expected headers
     field_definitions = [
@@ -86,7 +130,7 @@ def parse_invoice_text(matched_text):
         {
             'name': 'Description', 
             'headers': ['Description'], 
-            'multi_line': True
+            'multi_line': True, 
         },
         {
             'name': 'Comprising Manufacturing Part No', 
@@ -94,11 +138,15 @@ def parse_invoice_text(matched_text):
         },
         {
             'name': 'Assembled In', 
-            'headers': ['Assembled', 'In']
+            'headers': ['Assembled', 'In'], 
+            'multi_line': True, 
+            'join_string': ', '
         },
         {
             'name': 'Qty Per Country', 
-            'headers': ['Qty', 'Per', 'Country']
+            'headers': ['Qty', 'Per', 'Country'], 
+            'multi_line': True, 
+            'join_string': ', '
         },
         {
             'name': 'Shipped Qty', 
@@ -116,33 +164,44 @@ def parse_invoice_text(matched_text):
     
     result = {}
     value_index = 0
+    prev_multi_line_parts = []
     
     for field in field_definitions:
         if value_index >= len(values):
             result[field['name']] = None
             continue
         
-        # Handle multi-line fields (like Description)
+        # Handle multi-line fields
         if field.get('multi_line'):
-            description_parts = []
+            print(f"FIELD: {field.get('name')}")
+
+            current_multi_line_parts = []
+            
+
             while value_index < len(values):
-                # Stop when we hit a numeric value (next field)
-                print(f"values[value_index]: {values[value_index]}")
-                condition_1 = values[value_index].replace(',', '').replace('.', '').isdigit()
-                condition_2 =  re.match(r'^\d{7}-\d{5,6}$', values[value_index])
-                print(condition_1, condition_2)
-                if any([condition_1, condition_2]):
+                # Run specific check based on field
+                if InvoiceTextPatterns(
+                    values, 
+                    value_index, 
+                    field, 
+                    prev_multi_line_parts, 
+                    current_multi_line_parts
+                    ).run():
                     break
 
-                description_parts.append(values[value_index])
-                # print(f"description_parts: {description_parts}")
+                current_multi_line_parts.append(values[value_index])
                 value_index += 1
-            result[field['name']] = ' '.join(description_parts)
+                
+            # print(f"multi-line-parts: {current_multi_line_parts}")
+            join_string = field.get('join_string', ' ')
+            result[field['name']] = f'{join_string}'.join(current_multi_line_parts)
+            prev_multi_line_parts = current_multi_line_parts
         else:
             # Single value fields
             result[field['name']] = values[value_index]
-            # print(result)
             value_index += 1
+        
+        # print(result)
     
     return result
 
@@ -226,8 +285,8 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection, progress_c
 
         for idx, file_info in enumerate(zip_ref.infolist(), start=1):
             file_name = file_info.filename.lower()
-            # if not file_name.endswith('.pdf') or file_name != '42008392-1.pdf':
-            if not file_name.endswith('.pdf'):
+            if not file_name.endswith('.pdf') or file_name != '42820657-5.pdf':
+            # if not file_name.endswith('.pdf'):
                 continue
                 
             print(f" Processing {file_info.filename} ".center(80, '-'))

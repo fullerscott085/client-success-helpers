@@ -4,7 +4,7 @@ import datetime
 import io
 from main import dataframes_for_export, KeyItemCollection, KeyItem, DataType, process_zip_archive
 
-st.title("Oracle Commercial Invoice Processor")
+st.title("Oracle Commercial Invoice PDF Processor")
 
 # Upload ZIP File
 uploaded_file = st.file_uploader(
