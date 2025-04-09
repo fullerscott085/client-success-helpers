@@ -62,7 +62,7 @@ def parse_invoice_text(matched_text):
     """Parse the invoice text into a structured dictionary."""
     # Clean and split the text
     lines = [line.strip() for line in matched_text.split('\n') if line.strip()]
-    print(f'lines: {lines}')
+    # print(f'lines: {lines}')
     
     # Find where values begin (after "Line Total")
     try:
@@ -71,9 +71,9 @@ def parse_invoice_text(matched_text):
         return None
     
     headers = lines[:value_start]
-    print(f"headers: {headers}")
+    # print(f"headers: {headers}")
     values = lines[value_start:]
-    print(f"values: {values}")
+    # print(f"values: {values}")
 
 
     class InvoiceTextPatternsIntefrface:
@@ -285,8 +285,8 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection, progress_c
 
         for idx, file_info in enumerate(zip_ref.infolist(), start=1):
             file_name = file_info.filename.lower()
-            if not file_name.endswith('.pdf') or file_name != '42820657-5.pdf':
-            # if not file_name.endswith('.pdf'):
+            # if not file_name.endswith('.pdf') or file_name != '42820657-5.pdf':
+            if not file_name.endswith('.pdf'):
                 continue
                 
             print(f" Processing {file_info.filename} ".center(80, '-'))
