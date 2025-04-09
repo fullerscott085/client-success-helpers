@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import datetime
 import io
 from main import dataframes_for_export, KeyItemCollection, KeyItem, DataType, process_zip_archive
 
@@ -14,7 +15,14 @@ uploaded_file = st.file_uploader(
     help="A ZIP file containing Oracle Commercial invoices. Each file should be a PDF with exactly the same format."
 )
 
+if uploaded_file is not None:
+    # Save the file to disk
+    with open(f"./uploaded_files/{uploaded_file.name}", "wb") as f:
+        f.write(uploaded_file.getbuffer())
+    print(f"File saved as {uploaded_file.name}")
+
 if uploaded_file is not None and "processed_data" not in st.session_state:
+    print(f"\nSTART-TIME: {datetime.datetime.now().isoformat()}\n")
     status_text = st.empty()  # Placeholder for status updates
     progress_bar = st.progress(0)  # Progress bar
 
@@ -28,7 +36,10 @@ if uploaded_file is not None and "processed_data" not in st.session_state:
 
     # Callback function to update progress
     def update_progress(current, total):
+        print(f"current: {current}")
+        print(f"total: {total}")
         progress = int((current / total) * 100)
+        print(f"progress: {progress}")
         progress_bar.progress(progress)
         status_text.text(f"🔍 Processing file {current} of {total}...")
 
@@ -54,16 +65,17 @@ if uploaded_file is not None and "processed_data" not in st.session_state:
     output.seek(0)
     
     # Store results in session state to persist across reruns
-    st.session_state["processed_data"] = results
-    st.session_state["excel_file"] = output.getvalue()
+    # st.session_state["processed_data"] = results
+    # st.session_state["excel_file"] = output.getvalue()
     
     status_text.text("📝 Excel file created. Finalizing...")
     status_text.text("✅ Process complete. Download your Excel file below.")
 
     st.download_button(
         label="Download Excel",
-        data=st.session_state['excel_file'],
+        data=output.getvalue(), #st.session_state['excel_file'],
         file_name="results.xlsx",
         mime="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         icon="⬇️"
     )
+    print(f"\nEND-TIME: {datetime.datetime.now().isoformat()}\n")

@@ -30,6 +30,7 @@ class KeyItem:
         if not self.key.islower() or ' ' in self.key:
             raise ValueError("Key must be lowercase without spaces")
 
+
 @dataclass
 class KeyItemCollection:
     """Manages a collection of KeyItems with validation and access methods."""
@@ -61,6 +62,7 @@ def parse_invoice_text(matched_text):
     """Parse the invoice text into a structured dictionary."""
     # Clean and split the text
     lines = [line.strip() for line in matched_text.split('\n') if line.strip()]
+    print(f'lines: {lines}')
     
     # Find where values begin (after "Line Total")
     try:
@@ -73,15 +75,43 @@ def parse_invoice_text(matched_text):
     
     # Define field structure with expected headers
     field_definitions = [
-        {'name': 'Line', 'headers': ['Line']},
-        {'name': 'Marketing Part Number', 'headers': ['Marketing', 'Part', 'Number']},
-        {'name': 'Description', 'headers': ['Description'], 'multi_line': True},
-        {'name': 'Comprising Manufacturing Part No', 'headers': ['Comprising', 'Manufacturing', 'Part', 'No']},
-        {'name': 'Assembled In', 'headers': ['Assembled', 'In']},
-        {'name': 'Qty Per Country', 'headers': ['Qty', 'Per', 'Country']},
-        {'name': 'Shipped Qty', 'headers': ['Shipped', 'Qty']},
-        {'name': 'Unit Price', 'headers': ['Unit', 'Price']},
-        {'name': 'Line Total', 'headers': ['Line', 'Total']}
+        {
+            'name': 'Line', 
+            'headers': ['Line']
+        },
+        {
+            'name': 'Marketing Part Number', 
+            'headers': ['Marketing', 'Part', 'Number']
+        },
+        {
+            'name': 'Description', 
+            'headers': ['Description'], 
+            'multi_line': True
+        },
+        {
+            'name': 'Comprising Manufacturing Part No', 
+            'headers': ['Comprising', 'Manufacturing', 'Part', 'No']
+        },
+        {
+            'name': 'Assembled In', 
+            'headers': ['Assembled', 'In']
+        },
+        {
+            'name': 'Qty Per Country', 
+            'headers': ['Qty', 'Per', 'Country']
+        },
+        {
+            'name': 'Shipped Qty', 
+            'headers': ['Shipped', 'Qty']
+        },
+        {
+            'name': 'Unit Price', 
+            'headers': ['Unit', 'Price']
+        },
+        {
+            'name': 'Line Total', ''
+            'headers': ['Line', 'Total']
+        }
     ]
     
     result = {}
@@ -97,18 +127,25 @@ def parse_invoice_text(matched_text):
             description_parts = []
             while value_index < len(values):
                 # Stop when we hit a numeric value (next field)
-                if (values[value_index].replace(',', '').replace('.', '').isdigit() or
-                    values[value_index].startswith('CN')):  # Special case for country code
+                print(f"values[value_index]: {values[value_index]}")
+                condition_1 = values[value_index].replace(',', '').replace('.', '').isdigit()
+                condition_2 =  re.match(r'^\d{7}-\d{5,6}$', values[value_index])
+                print(condition_1, condition_2)
+                if any([condition_1, condition_2]):
                     break
+
                 description_parts.append(values[value_index])
+                # print(f"description_parts: {description_parts}")
                 value_index += 1
             result[field['name']] = ' '.join(description_parts)
         else:
             # Single value fields
             result[field['name']] = values[value_index]
+            # print(result)
             value_index += 1
     
     return result
+
 
 def extract_text_from_pdf(doc_pages):
     texts = []
@@ -185,10 +222,12 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection, progress_c
     
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         pdf_files = [file_info for file_info in zip_ref.infolist() if file_info.filename.lower().endswith('.pdf')]
-        total_files = len(pdf_files)
+        total_files = len(pdf_files) + 1
 
         for idx, file_info in enumerate(zip_ref.infolist(), start=1):
-            if not file_info.filename.lower().endswith('.pdf'):
+            file_name = file_info.filename.lower()
+            # if not file_name.endswith('.pdf') or file_name != '42008392-1.pdf':
+            if not file_name.endswith('.pdf'):
                 continue
                 
             print(f" Processing {file_info.filename} ".center(80, '-'))
