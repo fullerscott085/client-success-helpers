@@ -171,7 +171,7 @@ def process_single_pdf(file: BytesIO, collection: KeyItemCollection) -> Dict:
     return results
 
 
-def process_zip_archive(zip_path: str, collection: KeyItemCollection) -> List[Dict]:
+def process_zip_archive(zip_path: str, collection: KeyItemCollection, progress_callback=None) -> List[Dict]:
     """Process all PDFs in a ZIP archive and return extracted data.
     
     Args:
@@ -184,7 +184,10 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection) -> List[Di
     results = []
     
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        for file_info in zip_ref.infolist():
+        pdf_files = [file_info for file_info in zip_ref.infolist() if file_info.filename.lower().endswith('.pdf')]
+        total_files = len(pdf_files)
+
+        for idx, file_info in enumerate(zip_ref.infolist(), start=1):
             if not file_info.filename.lower().endswith('.pdf'):
                 continue
                 
@@ -206,6 +209,10 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection) -> List[Di
                 # Reset collection results for next document
                 for item in collection.items:
                     item.result = None
+
+                # Update progress in Streamlit
+                if progress_callback:
+                    progress_callback(idx, total_files)
                     
     return results
 
