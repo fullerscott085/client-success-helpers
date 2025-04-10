@@ -7,6 +7,7 @@ from dataclasses import asdict
 import zipfile
 import re
 from io import BytesIO
+import json
 
 
 class DataType(Enum):
@@ -71,9 +72,9 @@ def parse_invoice_text(matched_text):
         return None
     
     headers = lines[:value_start]
-    # print(f"headers: {headers}")
+    print(f"headers: {headers}")
     values = lines[value_start:]
-    # print(f"values: {values}")
+    print(f"values: {values}")
 
 
     class InvoiceTextPatternsIntefrface:
@@ -90,8 +91,13 @@ def parse_invoice_text(matched_text):
         
         @staticmethod
         def qty_per_country(text: str, index: int, previous_extract: list, current_extract: list):
-            # print(f"previous_extract: {previous_extract}")
-            condition_1 = len(previous_extract) == len(current_extract)
+
+            # Count number of countries
+            pattern = re.compile(r'[A-Z]{2}\s+[A-Z][a-z]+.*')  # \s+ matches one or more spaces
+            number_of_locations = sum(1 for search_in_text in previous_extract if pattern.search(search_in_text))
+            # print(f"number_of_locations: {number_of_locations}")
+
+            condition_1 = number_of_locations == len(current_extract)
             condition_2 = len(previous_extract) > 0 and len(current_extract) > 0
             return [condition_1 and condition_2]
 
@@ -173,7 +179,7 @@ def parse_invoice_text(matched_text):
         
         # Handle multi-line fields
         if field.get('multi_line'):
-            print(f"FIELD: {field.get('name')}")
+            print(f"POSSIBLE-MULTI-LINE-FIELD: {field.get('name')}")
 
             current_multi_line_parts = []
             
@@ -201,7 +207,7 @@ def parse_invoice_text(matched_text):
             result[field['name']] = values[value_index]
             value_index += 1
         
-        # print(result)
+    print(json.dumps(result, indent=4, default=str))
     
     return result
 
@@ -289,7 +295,7 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection, progress_c
             if not file_name.endswith('.pdf'):
                 continue
                 
-            print(f" Processing {file_info.filename} ".center(80, '-'))
+            print('\n', f" Processing {file_info.filename} ".center(150, '-'), '\n')
             
             with zip_ref.open(file_info.filename) as file:
                 # Process the PDF and get results
@@ -311,7 +317,7 @@ def process_zip_archive(zip_path: str, collection: KeyItemCollection, progress_c
                 # Update progress in Streamlit
                 if progress_callback:
                     progress_callback(idx, total_files)
-                    
+
     return results
 
 

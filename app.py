@@ -36,10 +36,10 @@ if uploaded_file is not None and "processed_data" not in st.session_state:
 
     # Callback function to update progress
     def update_progress(current, total):
-        print(f"current: {current}")
-        print(f"total: {total}")
+        # print(f"current: {current}")
+        # print(f"total: {total}")
         progress = int((current / total) * 100)
-        print(f"progress: {progress}")
+        # print(f"progress: {progress}")
         progress_bar.progress(progress)
         status_text.text(f"🔍 Processing file {current} of {total}...")
 
