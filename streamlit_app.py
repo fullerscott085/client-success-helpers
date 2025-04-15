@@ -3,6 +3,7 @@ import pandas as pd
 import datetime
 import io
 from main import dataframes_for_export, KeyItemCollection, KeyItem, DataType, process_zip_archive
+from deployment_config import STORE_FILE_LOCALLY
 
 st.title("Oracle Commercial Invoice PDF Processor")
 
@@ -15,7 +16,7 @@ uploaded_file = st.file_uploader(
     help="A ZIP file containing Oracle Commercial invoices. Each file should be a PDF with exactly the same format."
 )
 
-if uploaded_file is not None:
+if uploaded_file is not None and STORE_FILE_LOCALLY:
     # Save the file to disk
     with open(f"./uploaded_files/{uploaded_file.name}", "wb") as f:
         f.write(uploaded_file.getbuffer())
